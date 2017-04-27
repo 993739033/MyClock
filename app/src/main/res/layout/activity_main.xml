@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.app.myclock.MainActivity">
 
 
     <TabHost
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/tabhost"
-        >
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,29 +30,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.app.myclock.TimeView
-                    android:id="@+id/tabTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView
-                        android:textSize="48dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceLargePopupMenu"
-                        android:id="@+id/showTime"
-                        />
-
-                </com.app.myclock.TimeView>
-
-                <LinearLayout
+                <com.app.myclock.AlarmView
                     android:id="@+id/tabAlarm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <ListView
+                        android:id="@+id/listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                    </ListView>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Btn_addAlarm"
+                        android:textSize="20dp"
+                        android:text="Add Alarm"
+                        />
 
-                </LinearLayout>
+
+                </com.app.myclock.AlarmView>
 
                 <LinearLayout
                     android:id="@+id/tabTimer"
@@ -68,9 +66,25 @@
                     android:orientation="vertical">
 
                 </LinearLayout>
+
+                <com.app.myclock.TimeView
+                    android:id="@+id/tabTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/showTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceLargePopupMenu"
+                        android:textSize="48dp" />
+
+                </com.app.myclock.TimeView>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
 
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
