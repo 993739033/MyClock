@@ -1,11 +1,14 @@
 package com.app.myclock;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -51,7 +54,33 @@ public class AlarmView extends LinearLayout {
             }
         });
         readsaveAlarmList();
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(getContext()).setItems(new CharSequence[]{"Delete"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                deleteAlarm(position);
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                }).setTitle("请选择操作").setNegativeButton("CANEL", null).show();
+
+                return true;
+            }
+        });
     }
+
+    private void deleteAlarm(int position) {
+        alarmDateArrayAdapter.remove(alarmDateArrayAdapter.getItem(position));
+        saveAlarmList();
+    }
+
     private void addAlarm(){
 
         Calendar calendar = Calendar.getInstance();
@@ -71,22 +100,36 @@ public class AlarmView extends LinearLayout {
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
     }
+
+    /**
+     * 用于将设置的闹钟保存到preference
+     *
+     */
     private void saveAlarmList(){
         SharedPreferences.Editor editor = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE).edit();
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i=0;i<alarmDateArrayAdapter.getCount();i++) {
-            stringBuilder.append(alarmDateArrayAdapter.getItem(i).getTime()).append(",");
-        }
-        String content = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
-        editor.putString(KEY_ALARM_LIST, content);
-        editor.commit();
+        if (alarmDateArrayAdapter.getCount()!=0) {
+            for (int i = 0; i < alarmDateArrayAdapter.getCount(); i++) {
+                stringBuilder.append(alarmDateArrayAdapter.getItem(i).getTime()).append(",");
+            }
+            String content = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+            editor.putString(KEY_ALARM_LIST, content);
 
+        }
+        else {
+            editor.putString(KEY_ALARM_LIST, "");
+        }
+        editor.commit();
     }
+
+    /**
+     * 用于读取保存的perference数据
+     */
     private void readsaveAlarmList() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
 
-        String content = sharedPreferences.getString(KEY_ALARM_LIST, null);
-        if (content != null) {
+        String content = sharedPreferences.getString(KEY_ALARM_LIST, "");
+        if (!content.equals("")) {
         String[] dates = content.split(",");
         for (String s : dates) {
             alarmDateArrayAdapter.add(new AlarmDate(Long.parseLong(s)));
