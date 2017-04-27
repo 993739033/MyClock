@@ -2,6 +2,7 @@ package com.app.myclock;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -20,6 +21,8 @@ import java.util.Calendar;
 public class AlarmView extends LinearLayout {
     private Button Btn_add;
     private ListView listView;
+
+    private static String KEY_ALARM_LIST="alarm";
 
     public AlarmView(Context context) {
         super(context);
@@ -47,6 +50,7 @@ public class AlarmView extends LinearLayout {
              addAlarm();
             }
         });
+        readsaveAlarmList();
     }
     private void addAlarm(){
 
@@ -63,8 +67,32 @@ public class AlarmView extends LinearLayout {
 
                 }
                 alarmDateArrayAdapter.add(new  AlarmDate(c.getTimeInMillis()));
+                saveAlarmList();
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+    }
+    private void saveAlarmList(){
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE).edit();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i=0;i<alarmDateArrayAdapter.getCount();i++) {
+            stringBuilder.append(alarmDateArrayAdapter.getItem(i).getTime()).append(",");
+        }
+        String content = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+        editor.putString(KEY_ALARM_LIST, content);
+        editor.commit();
+
+    }
+    private void readsaveAlarmList() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
+
+        String content = sharedPreferences.getString(KEY_ALARM_LIST, null);
+        if (content != null) {
+        String[] dates = content.split(",");
+        for (String s : dates) {
+            alarmDateArrayAdapter.add(new AlarmDate(Long.parseLong(s)));
+        }
+     }
+
     }
     private static class AlarmDate {
 
