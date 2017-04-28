@@ -1,9 +1,12 @@
 package com.app.myclock;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -24,21 +28,35 @@ import java.util.Calendar;
 public class AlarmView extends LinearLayout {
     private Button Btn_add;
     private ListView listView;
+    private AlarmManager alarmManager;
+    private static int pendingid=1;
 
     private static String KEY_ALARM_LIST="alarm";
 
     public AlarmView(Context context) {
         super(context);
+        initView();
     }
 
     public AlarmView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initView();
     }
 
     public AlarmView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initView();
     }
+
+    private void initView(){
+        alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        }
+
     private   ArrayAdapter<AlarmView.AlarmDate> alarmDateArrayAdapter;
+
+
+
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -67,7 +85,6 @@ public class AlarmView extends LinearLayout {
                             default:
                                 break;
                         }
-
                     }
                 }).setTitle("请选择操作").setNegativeButton("CANEL", null).show();
 
@@ -76,9 +93,16 @@ public class AlarmView extends LinearLayout {
         });
     }
 
+
+
+
+
     private void deleteAlarm(int position) {
-        alarmDateArrayAdapter.remove(alarmDateArrayAdapter.getItem(position));
+        AlarmDate date= alarmDateArrayAdapter.getItem(position);
+        alarmDateArrayAdapter.remove(date);
         saveAlarmList();
+        alarmManager.cancel(
+                PendingIntent.getBroadcast(getContext(),date.getId(),new Intent(getContext(),AlarmBroadCast.class),0));
     }
 
     private void addAlarm(){
@@ -90,6 +114,9 @@ public class AlarmView extends LinearLayout {
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 c.set(Calendar.MINUTE, minute);
+                c.set(Calendar.SECOND, 0);
+                c.set(Calendar.MILLISECOND, 0);
+                AlarmDate date = new AlarmDate(c.getTimeInMillis());
                 Calendar currentTime = Calendar.getInstance();
                 if (c.getTimeInMillis() <= currentTime.getTimeInMillis()) {
                     c.setTimeInMillis(c.getTimeInMillis()+24*60*60*1000);
@@ -97,6 +124,15 @@ public class AlarmView extends LinearLayout {
                 }
                 alarmDateArrayAdapter.add(new  AlarmDate(c.getTimeInMillis()));
                 saveAlarmList();
+                /**
+                 * 给AlarmManager添加任务
+                 */
+                date.setId(pendingid++);
+                Toast.makeText(getContext(), date.getId()+"", Toast.LENGTH_SHORT).show();
+                Intent in=new Intent(getContext(),AlarmBroadCast.class);
+                in.putExtra("id", date.getId());
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),1*20*1000,
+                        PendingIntent.getBroadcast(getContext(),date.getId(),in,0));
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
     }
@@ -138,7 +174,7 @@ public class AlarmView extends LinearLayout {
 
     }
     private static class AlarmDate {
-
+        private int id=0;
         public long getTime() {
             return time;
         }
@@ -157,10 +193,16 @@ public class AlarmView extends LinearLayout {
             timeLabel = calendar.get(Calendar.MONTH)+1+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日"+
             calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
         }
-
         @Override
         public String toString() {
             return timeLabel;
+        }
+        public int getId(){
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id=id;
         }
     }
 

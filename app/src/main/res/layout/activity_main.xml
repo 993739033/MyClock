@@ -52,13 +52,102 @@
 
                 </com.app.myclock.AlarmView>
 
-                <LinearLayout
+                <com.app.myclock.TimerView
                     android:id="@+id/tabTimer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <EditText
+                            android:id="@+id/Et_Hour"
+                            android:maxLines="1"
 
-                </LinearLayout>
+                            android:inputType="number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="26dp"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="26dp"
+
+                            />
+                        <EditText
+                            android:id="@+id/Et_Min"
+                            android:maxLines="1"
+                            android:inputType="number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="26dp"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="26dp"
+
+                            />
+                        <EditText
+                            android:id="@+id/Et_Second"
+                            android:maxLines="1"
+                            android:inputType="number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="26dp"
+                            />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Start"
+                            android:textAllCaps="false"
+                            android:id="@+id/Btn_Start"
+                            />
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Reset"
+                            android:textAllCaps="false"
+                            android:id="@+id/Btn_Reset"
+                            />
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Pause"
+                            android:textAllCaps="false"
+                            android:id="@+id/Btn_Pause"
+                            />
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Resume"
+                            android:textAllCaps="false"
+                            android:id="@+id/Btn_Resume"
+                            />
+                    </LinearLayout>
+
+                </com.app.myclock.TimerView>
                 <LinearLayout
                     android:id="@+id/tabStopWatch"
                     android:layout_width="match_parent"

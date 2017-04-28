@@ -16,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".AlarmBroadCast"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".Alarmlayout"></activity>
     </application>
 
 </manifest>
