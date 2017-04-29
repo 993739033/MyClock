@@ -148,13 +148,117 @@
                     </LinearLayout>
 
                 </com.app.myclock.TimerView>
-                <LinearLayout
+                <com.app.myclock.StopTimeForWatchView
                     android:id="@+id/tabStopWatch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="36dp"
+                            android:id="@+id/Stop_Hour"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="36dp"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="36dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/Stop_Min"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="36dp"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="36dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/Stop_Second"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="36dp"
+                            android:text=":"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/Stop_MSecond"
+                            />
+                    </LinearLayout>
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="36dp"
+                        android:id="@+id/Stop_listview"
+                        ></ListView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/Stop_Btn_Start"
+                            android:text="Start"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/Stop_Btn_Reset"
+                            android:text="Reset"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            />
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/Stop_Btn_Lap"
+                            android:text="Lap"
+                            android:textAllCaps="false"
+                            />
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/Stop_Btn_Pause"
+                            android:text="Pause"
+                            android:textAllCaps="false"
+                            />
+                        <Button
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/Stop_Btn_Remuse"
+                            android:text="Remuse"
+                            android:textAllCaps="false"
+                            />
 
-                </LinearLayout>
+                    </LinearLayout>
+
+                </com.app.myclock.StopTimeForWatchView>
 
                 <com.app.myclock.TimeView
                     android:id="@+id/tabTime"

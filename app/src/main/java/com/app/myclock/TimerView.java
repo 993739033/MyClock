@@ -24,18 +24,20 @@ import java.util.TimerTask;
 
 public class TimerView extends LinearLayout {
     private Timer timer = null;
-    private TimerTask timerTask=null;
+    private TimerTask timerTask = null;
     private static int getTime;//用于获取设置的总的时间值 单位秒
-    private final static int MSG_WHAT_TIME_IS_UP=1;
-    private final static int MSG_WHAT_TIME_Tick=2;
+    private final static int MSG_WHAT_TIME_IS_UP = 1;
+    private final static int MSG_WHAT_TIME_Tick = 2;
 
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_WHAT_TIME_IS_UP:
-                    new AlertDialog.Builder(getContext()).setTitle("Time is up").setMessage("Time is up yo!").setNegativeButton("ComeBack",null).show();
+                    new AlertDialog.Builder(getContext()).setTitle("Time is up").setMessage("Time is up yo!").
+                            setNegativeButton("ComeBack", null).show();
+
                     StopTimerTask();
                     Btn_Start.setVisibility(VISIBLE);
                     Btn_Pause.setVisibility(View.GONE);
@@ -43,11 +45,11 @@ public class TimerView extends LinearLayout {
                     Et_Hour.setEnabled(true);
                     Et_Min.setEnabled(true);
                     Et_Second.setEnabled(true);
-                break;
+                    break;
                 case MSG_WHAT_TIME_Tick:
-                     int hour=getTime/60/60;
-                    int min= (getTime/60)%60;
-                    int second = getTime%60%60;
+                    int hour = getTime / 60 / 60;
+                    int min = (getTime / 60) % 60;
+                    int second = getTime % 60 % 60;
                     Et_Hour.setText(hour + "");
                     Et_Min.setText(min + "");
                     Et_Second.setText(second + "");
@@ -71,8 +73,10 @@ public class TimerView extends LinearLayout {
     public TimerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-    private Button Btn_Start,Btn_Reset,Btn_Pause,Btn_Resume;
-    private EditText Et_Hour,Et_Min,Et_Second;
+
+    private Button Btn_Start, Btn_Reset, Btn_Pause, Btn_Resume;
+    private EditText Et_Hour, Et_Min, Et_Second;
+
     @Override
     protected void onFinishInflate() {
         /**
@@ -219,48 +223,47 @@ public class TimerView extends LinearLayout {
     }
 
 
+    private void StartTimerTask() {
+        getTime = Integer.parseInt(TextUtils.isEmpty(Et_Hour.getText().toString()) ? "0" : Et_Hour.getText().toString()) * 60 * 60 +
+                Integer.parseInt(TextUtils.isEmpty(Et_Min.getText().toString()) ? "0" : Et_Min.getText().toString()) * 60 +
+                Integer.parseInt(TextUtils.isEmpty(Et_Second.getText().toString()) ? "0" : Et_Second.getText().toString());
+        if (timerTask == null) {
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    getTime--;
+                    handler.sendEmptyMessage(MSG_WHAT_TIME_Tick);
+                    if (getTime <= 0) {
+                        Message message = new Message();
+                        message.what = MSG_WHAT_TIME_IS_UP;
+                        handler.sendMessage(message);
+
+                    }
+
+                }
+            };
+
+            timer = new Timer();
+            timer.schedule(timerTask, 1000, 1000);//第二个参数是延迟触发的时间 第三个参数是重复执行的时间间隔 如 不设置第三个参数 则只进行一次执行
+
+        }
 
 
-     private void StartTimerTask(){
-         getTime=Integer.parseInt(TextUtils.isEmpty(Et_Hour.getText().toString())?"0":Et_Hour.getText().toString())*60*60+
-                 Integer.parseInt(TextUtils.isEmpty(Et_Min.getText().toString())?"0":Et_Min.getText().toString())*60+
-                 Integer.parseInt(TextUtils.isEmpty(Et_Second.getText().toString())?"0":Et_Second.getText().toString());
-         if (timerTask == null) {
-             timerTask=new TimerTask() {
-                 @Override
-                 public void run() {
-                   getTime--;
-                     handler.sendEmptyMessage(MSG_WHAT_TIME_Tick);
-                     if (getTime <= 0) {
-                         Message message=new Message();
-                         message.what=MSG_WHAT_TIME_IS_UP;
-                         handler.sendMessage(message);
+    }
 
-                     }
-
-                 }
-             };
-
-             timer = new Timer();
-             timer.schedule(timerTask,1000,1000);//第二个参数是延迟触发的时间 第三个参数是重复执行的时间间隔 如 不设置第三个参数 则只进行一次执行
-
-         }
+    private void StopTimerTask() {
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
 
 
-     }
-     private void StopTimerTask(){
-         if (timerTask != null) {
-             timerTask.cancel();
-             timerTask=null;
+        }
 
+    }
 
-         }
-
-     }
-
-    private void CheckToEnableStartButton(){
-          Btn_Start.setEnabled((!TextUtils.isEmpty(Et_Hour.getText())&&Integer.parseInt(Et_Hour.getText().toString()) >0)
-                  || (!TextUtils.isEmpty(Et_Min.getText())&&Integer.parseInt(Et_Min.getText().toString())>0)
-                  || (!TextUtils.isEmpty(Et_Second.getText())&&Integer.parseInt(Et_Second.getText().toString())>0));
+    private void CheckToEnableStartButton() {
+        Btn_Start.setEnabled((!TextUtils.isEmpty(Et_Hour.getText()) && Integer.parseInt(Et_Hour.getText().toString()) > 0)
+                || (!TextUtils.isEmpty(Et_Min.getText()) && Integer.parseInt(Et_Min.getText().toString()) > 0)
+                || (!TextUtils.isEmpty(Et_Second.getText()) && Integer.parseInt(Et_Second.getText().toString()) > 0));
     }
 }
